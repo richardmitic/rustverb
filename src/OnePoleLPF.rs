@@ -38,13 +38,11 @@ impl OnePoleLPF {
 #[cfg(test)]
 mod tests {    
     use super::*;
-    use rand::Rng;
-    use crate::test_util::save;
+    use crate::test_util::*;
 
     #[test]
     fn test_lowpass() {
-        let mut rng = rand::thread_rng();
-        let noise: Vec<f64> = (0..44100).map(|_| rng.gen::<f64>() * 2. - 1.).collect();
+        let noise = generate_noise(44100);
         save(&noise, "test_lowpass_original.wav");
         
         let mut lpf = OnePoleLPF::new(44100., 400.);

@@ -1,6 +1,8 @@
 mod OnePoleLPF;
 mod Delay;
 mod CombFilter;
+mod LPFCombFilter;
+mod DelayAPF;
 
 fn main() {
     println!("Hello, world!");
@@ -10,6 +12,12 @@ fn main() {
 #[cfg(test)]
 pub mod test_util {
     use hound;
+    use rand::Rng;
+
+    pub fn generate_noise(length: usize) -> Vec<f64> {
+        let mut rng = rand::thread_rng();
+        (0..length).map(|_| rng.gen::<f64>() * 2. - 1.).collect()
+    }
 
     pub fn save(arr: &Vec<f64>, filename: &str) {
         let spec = hound::WavSpec {
