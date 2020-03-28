@@ -1,10 +1,10 @@
-use crate::Delay::Delay;
-use crate::OnePoleLPF::OnePoleLPF;
+use crate::delay::Delay;
+use crate::lowpass::OnePoleLPF;
 
 pub struct LPFCombFilter {
     delay: Delay,
     lowpass: OnePoleLPF,
-    g: f64
+    g: f64,
 }
 
 impl LPFCombFilter {
@@ -12,20 +12,20 @@ impl LPFCombFilter {
         LPFCombFilter {
             delay: Delay::new(delay_length),
             lowpass: OnePoleLPF::new(sample_rate, cutoff),
-            g: g
+            g: g,
         }
     }
 
     pub fn next(&mut self, s: f64) -> f64 {
         let delayed_sample = self.delay.read();
-        self.delay.write_and_advance((self.lowpass.next(delayed_sample) * self.g) + s);
+        self.delay
+            .write_and_advance((self.lowpass.next(delayed_sample) * self.g) + s);
         delayed_sample
     }
 }
 
-
 #[cfg(test)]
-mod tests {    
+mod tests {
     use super::*;
     use crate::test_util::*;
 
@@ -33,7 +33,7 @@ mod tests {
     fn test_comb_filter() {
         let noise = generate_noise(44100);
         save(&noise, "test_lpf_comb_filter_original.wav");
-        
+
         let mut lpfcf = LPFCombFilter::new(20, 0.5, 44100., 400.);
         let filtered: Vec<f64> = noise.into_iter().map(|s| lpfcf.next(s)).collect();
         save(&filtered, "test_lpf_comb_filter_filtered.wav");

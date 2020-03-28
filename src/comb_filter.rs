@@ -1,15 +1,15 @@
-use crate::Delay::Delay;
+use crate::delay::Delay;
 
 pub struct CombFilter {
     delay: Delay,
-    g: f64
+    g: f64,
 }
 
 impl CombFilter {
     pub fn new(delay_length: usize, g: f64) -> CombFilter {
         CombFilter {
             delay: Delay::new(delay_length),
-            g: g
+            g: g,
         }
     }
 
@@ -20,9 +20,8 @@ impl CombFilter {
     }
 }
 
-
 #[cfg(test)]
-mod tests {    
+mod tests {
     use super::*;
     use crate::test_util::*;
 
@@ -30,7 +29,7 @@ mod tests {
     fn test_comb_filter() {
         let noise = generate_noise(44100);
         save(&noise, "test_comb_filter_original.wav");
-        
+
         let mut cf = CombFilter::new(20, 0.5);
         let filtered: Vec<f64> = noise.into_iter().map(|s| cf.next(s)).collect();
         save(&filtered, "test_comb_filter_filtered.wav");

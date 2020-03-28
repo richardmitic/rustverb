@@ -3,7 +3,7 @@ extern crate rand;
 pub struct OnePoleLPF {
     a0: f64,
     b1: f64,
-    z1: f64
+    z1: f64,
 }
 
 impl OnePoleLPF {
@@ -12,7 +12,7 @@ impl OnePoleLPF {
         OnePoleLPF {
             a0: a0,
             b1: b1,
-            z1: 0.
+            z1: 0.,
         }
     }
 
@@ -31,9 +31,8 @@ impl OnePoleLPF {
     }
 }
 
-
 #[cfg(test)]
-mod tests {    
+mod tests {
     use super::*;
     use crate::test_util::*;
 
@@ -41,7 +40,7 @@ mod tests {
     fn test_lowpass() {
         let noise = generate_noise(44100);
         save(&noise, "test_lowpass_original.wav");
-        
+
         let mut lpf = OnePoleLPF::new(44100., 400.);
         let filtered: Vec<f64> = noise.into_iter().map(|s| lpf.next(s)).collect();
         save(&filtered, "test_lowpass_filtered.wav");

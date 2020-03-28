@@ -1,15 +1,15 @@
-use crate::Delay::Delay;
+use crate::delay::Delay;
 
 pub struct DelayAPF {
     delay: Delay,
-    g: f64
+    g: f64,
 }
 
 impl DelayAPF {
     pub fn new(delay_length: usize, g: f64) -> DelayAPF {
         DelayAPF {
             delay: Delay::new(delay_length),
-            g: g
+            g: g,
         }
     }
 
@@ -22,7 +22,7 @@ impl DelayAPF {
 }
 
 #[cfg(test)]
-mod tests {    
+mod tests {
     use super::*;
     use crate::test_util::*;
 
@@ -30,7 +30,7 @@ mod tests {
     fn test_delay_apf() {
         let noise = generate_noise(44100);
         save(&noise, "test_delay_apf_original.wav");
-        
+
         let mut lpfcf = DelayAPF::new(140, 0.5);
         let filtered: Vec<f64> = noise.into_iter().map(|s| lpfcf.next(s)).collect();
         save(&filtered, "test_delay_apf_filtered.wav");
