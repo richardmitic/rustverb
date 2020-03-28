@@ -23,13 +23,10 @@ impl OnePoleLPF {
     }
 
     fn calculate_coefficients(sample_rate: f64, cutoff: f64) -> (f64, f64) {
-        // let a0 = (2. * std::f64::consts::PI * (cutoff / sample_rate)).sin();
-        // let b1 = a0 - 1.;
         let theta = 2. * std::f64::consts::PI * (cutoff / sample_rate);
         let gamma = 2. - theta.cos();
         let b1 = (gamma.powf(2.) - 1.).sqrt() - gamma;
         let a0 = 1. + b1;
-        println!("{} {}", a0, b1);
         (a0, b1)
     }
 }
